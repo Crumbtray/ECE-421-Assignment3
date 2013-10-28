@@ -1,0 +1,35 @@
+1) What is your definition of an object?
+
+
+2) What strategies should be deployed in terms of accepting input (i.e. the large number of objects.)?
+
+
+3) Is your sort generic? What sorting criterion does your system use? Is this criterion flexible; i.e. changeable by the user at the point of execution? What limitations have you placed upon legal sorting criteria? To make it reusable to other people, how should we include it into the Ruby Class hierarchy?
+
+
+4) In reality we have a uniprocessor system, describe “equationally” what is happening to your solution as you increase the concurrency (e.g. produce a regression model (remember regression from ECE 231) of processing time against the number of threads. 
+Your solution can be modeled as a program which: (1) has a component which produces threads; and (2) a set of threads which undertake the same (small) task.
+This is in essence the basis of stress testing (discussed in CMPE 320?)
+
+
+5) Concurrent systems tend to crash frequently – what approach to exception- handling have you devised? Consider the content of the library at: http://c2.com/cgi/wiki?ExceptionPatterns; which are applicable to this problem? Is Module Errno useful in this problem? 
+
+8) What components of the Ruby exception hierarchy are applicable to this problem? Discuss in detail your strategy for exception-handling.
+
+6) What differences exist between thread-based and process-based solutions? How has this impacted the design of your solution?
+
+7) Do you have any race-condition or task synchronization concerns about your solution? How do we tidy-up a multi-threaded program, if stopped mid- execution?
+
+8) As discussed in CMPE 300: What is configuration management? What is version control? Are you using either concept? If “yes”, describe your process and any tool support what you utilize – illustrate your process with regard to Assignments 1 and 2; if “no”, justify your decision.
+
+9) Briefly Explain:
+a. What is refactoring (as discussed in CMPE 300)?
+
+b. Are you using refactoring in your development process? Justify your
+answer?
+
+c. If “yes”, give examples, minimum of 2, of the refactoring “patterns” that
+you used in Assignment 1
+
+d. If “no”, give examples of where your solution to Assignment 1 would be
+improved by applying refactoring patterns. Supply a minimum of two different (i.e. different refactoring patterns) as examples.
