@@ -3,8 +3,8 @@ include Test::Unit::Assertions
 
 # Module that implements multi-threaded merge sort
 module ParallelMergeSort
-	
-
+	# Sorts Array A in the time limit duration
+	# using Parallel MergeSort.
 	def self.MergeSort(duration, a)
 		# PRE Conditions
 		begin
@@ -34,7 +34,7 @@ module ParallelMergeSort
 	end
 
 	def invariant
-
+		assert(@timeTaken < duration)
 	end
 
 end
