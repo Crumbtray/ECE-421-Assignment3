@@ -21,7 +21,7 @@ module ParallelMergeSort
 
 		begin
 			a.each {|element|
-				raise ArgumentError, "ParallelMergeSort::ArgumentError -> Elements do not implement Comparable." unless a.first.included_modules.include? Comparable
+				raise ArgumentError, "ParallelMergeSort::ArgumentError -> Elements do not implement Comparable." unless element.included_modules.include? Comparable
 			}
 		end
 		# End PRE Conditions
