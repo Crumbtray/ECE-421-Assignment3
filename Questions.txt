@@ -16,6 +16,15 @@ This is in essence the basis of stress testing (discussed in CMPE 320?)
 
 6) What differences exist between thread-based and process-based solutions? How has this impacted the design of your solution?
 
+Differences:
+1. A process can have multiple threads, a thread can have only one process.
+2. Each process requires its own address space, threads can share an address space.
+3. Difficult for one process to be corrupted by another process as compared to threads.
+4. Easier for one thread to talk to another thread as compared to processes.
+
+Due to the above differences, a thread-based solution is more appropriate for our system.  Out design is concerned with saorting data.  For this purposes speed and communication are major priorities.  Speed for its obvious impact on total execution time and communication in order to allow the threads to coordinate their sorted data together.  Mutltple threads allow our design to easily sort the same set of data in the same memory space.
+ 
+
 7) Do you have any race-condition or task synchronization concerns about your solution? How do we tidy-up a multi-threaded program, if stopped mid- execution?
 
 8) As discussed in CMPE 300: What is configuration management? What is version control? Are you using either concept? If “yes”, describe your process and any tool support what you utilize – illustrate your process with regard to Assignments 1 and 2; if “no”, justify your decision.
