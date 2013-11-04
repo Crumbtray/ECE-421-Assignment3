@@ -30,6 +30,7 @@ module ParallelMergeSort
 
 		# POST Conditions
 		assert(@timeTaken < duration)
+		assert(acceptanceTest(a))
 		# End POST Conditions
 	end
 
@@ -37,4 +38,11 @@ module ParallelMergeSort
 		assert(@timeTaken < duration)
 	end
 
+	def acceptanceTest(a)
+		b = a.sort
+		if(a == b)
+			return true
+		else
+			return false
+	end
 end
