@@ -76,19 +76,23 @@ module ParallelMergeSort
 	# cMin specifies where to insert a newly sorted value into c
     def self.PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
       puts "PMerge"
-    puts unsorted.to_s
-    puts sorted.to_s
-    puts "%i %i %i %i %i" %[aMin, aMax, bMin, bMax, cMin]
+    	puts unsorted.to_s
+    	puts sorted.to_s
+    	puts "%i %i %i %i %i" %[aMin, aMax, bMin, bMax, cMin]
     
 		aLength = aMax - aMin + 1
 		bLength = bMax - bMin + 1
 		if bLength > aLength
+			puts "Reordering (B is longer than A)"
 			t1 = Thread.new do 
 				self.PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
 			end
 			t1.join
 		elsif bLength == 0
-		  sorted[cMin] = unsorted[aMin]
+			puts "B is zero, so use A"
+			puts "aMin: #{aMin} (Should be zero!!!!)"
+			puts "Index #{cMin} should be equal to #{unsorted[aMin]}"
+		  	sorted[cMin] = unsorted[aMin]
 		elsif (aLength == 1) and (bLength == 1)
   			if unsorted[aMin] <= unsorted[bMin]
   				sorted[cMin] = unsorted[aMin]
