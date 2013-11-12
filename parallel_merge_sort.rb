@@ -55,34 +55,34 @@ module ParallelMergeSort
 	# aMin and aMax specifiy where the subarray A is in a
 	# bMin and bMax specifiy where the subarray B is in a
 	# cMin specifies where to insert a newly sorted value into c
-    def PMerge(a, c, aMin, aMax, bMin, bMax, cMin)
+    def PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
 	  aLength = aMax - aMin + 1
 	  bLength = bMax - bMin + 1
 		if bLength > aLength
-			t1 = Thread.new do PMerge(a, bMin, bMax, aMin, aMax, vMin)
+			t1 = Thread.new do PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
 			end
 			t1.join
 		elsif (aLength== 1) and (bLength == 1)
-			if a[aMin] <= a[bMin]
-				c[cMin] = a[aMin]
-				c[cMin + 1] = a[bMin]
+			if unsorted[aMin] <= unsorted[bMin]
+				sorted[cMin] = unsorted[aMin]
+				sorted[cMin + 1] = unsorted[bMin]
 			else
-			  c[cMin] = a[bMin]
-        c[cMin + 1] = a[aMin]
+			  sorted[cMin] = unsorted[bMin]
+			  sorted[cMin + 1] = unsorted[aMin]
 			end
 		else 
-			bMid = BinarySearch(a, bMin, bMax, a[alength/2 + aMin])
+			bMid = BinarySearch(unsorted, bMin, bMax, unsorted[alength/2 + aMin])
 			aMid = (aMax + aMin) / 2
 			
 			t2 = Thread.new do 
-			  PMerge(a, c, aMin, aMid - 1, bMin, bMid, cMin)
+			  PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
 			end
 			
 			cMin = cMin + aMid - aMin + bMid - bMin
-			c[cMin] = a[aMid] 
+			sorted[cMin] = unsorted[aMid] 
 			
 			t3 = Thread.new do
-			  PMerge(a, c, aMid + 1, aMax, bMid, bMax, cMin)
+			  PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMin)
 			end
 			t2.join
 			t3.join
