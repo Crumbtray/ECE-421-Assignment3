@@ -30,7 +30,7 @@ module ParallelMergeSort
 
 		c = a.dup
 		
-		MergeSortInternal(a, 1, a.length - 1, c)
+		MergeSortInternal(a, 0, a.length - 1, c)
 		
 		puts a.to_s
 		
@@ -118,9 +118,9 @@ module ParallelMergeSort
 		puts "B: #{b}"
 		puts "C: #{c}"
 
-		l = a.length - 1
-		m = b.length - 1
-		n = c.length - 1
+		l = a.length
+		m = b.length
+		n = c.length
 
 		if(m > l)
 			t1 = Thread.new do
@@ -128,16 +128,20 @@ module ParallelMergeSort
 			end
 			t1.join
 		elsif (n == 1)
-			c[1] = a[1]
+			c[0] = a[0]
 		elsif (l == 1 && m == 1)
-			if(a[1] <= b[1])
-				c[1] = a[1]
-				c[2] = b[1]
+			if(a[0] <= b[0])
+				c[0] = a[0]
+				c[1] = b[0]
 			else
-				c[1] = b[1]
-				c[2] = a[1]
+				c[0] = b[0]
+				c[1] = a[0]
 			end
 		else
+			puts "A should not be size of one here. A: #{a}"
+			puts "B: #{b}"
+			puts "L: #{l}"
+			puts "M: #{m}"
 			midpoint = a[l / 2]
 			j = BinarySearch(b, b.first, b.last, midpoint)
 			t2 = Thread.new do
