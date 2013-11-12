@@ -32,9 +32,11 @@ module ParallelMergeSort
 		
 		MergeSortInternal(a, c, 0, a.length - 1, 0)
 		
+		a = c
+		
 		# POST Conditions
 		assert(@timeTaken < duration, "Time taken is over the stated duration.")
-		assert(acceptanceTest(c), "Array a is not sorted properly.")
+		assert(acceptanceTest(a), "Array a is not sorted properly.")
 		assert(Thread.list.select {|thread| thread.status == "run"}.count <= 1, "Threads running is greater than 1")
 		# End POST Conditions
 	end
