@@ -65,7 +65,6 @@ module ParallelMergeSort
 	end
 
 	def self.PMerge(a, b)
-		puts "PMerge on #{a}, #{b}"
 		result = Array.new
 		# The idea here is to concatenate a with b, but finding the right place to merge by using binary search.
 		if(b.length > a.length)
@@ -86,7 +85,6 @@ module ParallelMergeSort
 			# Split A and B by finding J through binary search.
 			midpoint = a.length / 2
 			j = self.MergeBinarySearch(b, a[midpoint])
-
 			t1 = Thread.new do
 				self.PMerge(a.take(midpoint), b.take(j + 1))
 			end
@@ -115,6 +113,8 @@ module ParallelMergeSort
 				imin = imid + 1
 			elsif (b[imid] > value)
 				imax = imid - 1
+			else
+				return imid
 			end
 		end
 

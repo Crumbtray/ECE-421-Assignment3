@@ -8,14 +8,14 @@ class SortTests < Test::Unit::TestCase
 	# - Really Small Duration (All threads should be dead)
 	# - Different sizes of input ()
 
-	def atest_argument_not_array
+	def test_argument_not_array
 		assert_raise ArgumentError do
 			a = "BOOBOO"
 			newA = ParallelMergeSort.Sort(10, a)
 		end
   	end
 	
-	def atest_arguments_not_comparable
+	def test_arguments_not_comparable
 		assert_raise ArgumentError do
 			a = [1,'a']
 			newA = ParallelMergeSort.Sort(10, a)
@@ -94,7 +94,7 @@ class SortTests < Test::Unit::TestCase
 		assert_equal(b,newA)
   	end
 	
-	def atest_many_numbers_with_duplicates
+	def test_many_numbers_with_duplicates
   		a = [10, 4, 2, 4, 1, 7, 5, 8, 9, 9, 1]
   		newA = ParallelMergeSort.Sort(10, a)
 		b = [1, 1, 2, 4, 4, 5, 7, 8, 9, 9, 10]
