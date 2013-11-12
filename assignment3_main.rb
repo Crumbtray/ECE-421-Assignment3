@@ -7,7 +7,7 @@
 
 require './parallel_merge_sort'
 require 'test/unit'
-require './parallel2'
+include 'assert'
 
 a = [2, 3, 1, 4, 8, 10, 6]
 newA = ParallelMergeSort.Sort(10, a)
