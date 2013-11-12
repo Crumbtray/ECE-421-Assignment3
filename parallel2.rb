@@ -1,7 +1,6 @@
 module ParallelMergeSort
 
 	def self.MergeSort(a)
-		puts "MergeSort"
 		if a.length <= 1
 			return a
 		else
@@ -19,7 +18,6 @@ module ParallelMergeSort
 			left = t1.value
 			right = t2.value
 
-			puts "Right is: #{right}"
 			returnval = self.PMerge(left, right)
 			puts "RETURN VAL: #{returnval}"
 			return returnval
@@ -48,10 +46,13 @@ module ParallelMergeSort
 			# Split A and B by finding J through binary search.
 			midpoint = a.length / 2
 			j = self.MergeBinarySearch(b, a[midpoint])
-			puts "J: #{j}"
-			
-			newa = self.PMerge(a.take(midpoint), b.take(j))
-			newb = self.PMerge(a.drop(midpoint), b.drop(j))
+			puts "#{b[j]} should be < #{a[midpoint]}"
+
+			puts "Breaking array #{a.to_s} into #{a.take(midpoint)}, #{a.drop(midpoint)}"
+			puts "Breaking array #{b.to_s} into #{b.take(j + 1)}, #{b.drop(j+1)}"
+
+			newa = self.PMerge(a.take(midpoint), b.take(j + 1))
+			newb = self.PMerge(a.drop(midpoint), b.drop(j + 1))
 
 			puts "NEWA: #{newa}"
 			puts "NEWB: #{newb}"
@@ -65,7 +66,6 @@ module ParallelMergeSort
 	# We're looking for the index J such that
 	# B[J] < value < B[J+1]
 	def self.MergeBinarySearch(b, value)
-		puts "Looking for #{value} within #{b.to_s}"
 		imin = 0
 		imax = b.length - 1
 
@@ -75,14 +75,10 @@ module ParallelMergeSort
 				imin = imid + 1
 			elsif (b[imid] > value)
 				imax = imid - 1
-			else
-				return imid
 			end
 		end
 
-		if(b[imax] < value)
-			return imid
-		end
+		return imax
 	end
 
 end

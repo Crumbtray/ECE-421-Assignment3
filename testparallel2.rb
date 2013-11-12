@@ -9,9 +9,9 @@ class MergeSortTests < Test::Unit::TestCase
 	# - Different sizes of input ()
 
 	def test_basic_unsorted_numbers
-  		a = [2, 3, 1, 4]
+  		a = [2, 3, 1, 4, 8, 10, 6]
   		newA = ParallelMergeSort.MergeSort(a)
-		b = [1, 2, 3, 4]
+		b = [1, 2, 3, 4, 6, 8, 10]
 		assert_equal(b,newA)
   	end
 end
