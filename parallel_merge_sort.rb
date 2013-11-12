@@ -60,7 +60,7 @@ module ParallelMergeSort
 				self.MergeSortInternal(a, q + 1, finalIndex, c)
 			end
 			t1.join
-			t2.join
+			t2.join	
 			self.ClintonPMerge(t1.value, t2.value, c)
 			#self.PMerge(threads, a, c, beginIndex, q, q + 1, finalIndex, beginIndex)
 		end
@@ -121,6 +121,9 @@ module ParallelMergeSort
 		l = a.length
 		m = b.length
 		n = c.length
+		puts "L: #{l}"
+		puts "M: #{m}"
+		puts "N: #{n}"
 
 		if(m > l)
 			t1 = Thread.new do
@@ -138,12 +141,12 @@ module ParallelMergeSort
 				c[1] = a[0]
 			end
 		else
-			puts "A should not be size of one here. A: #{a}"
-			puts "B: #{b}"
-			puts "L: #{l}"
-			puts "M: #{m}"
 			midpoint = a[l / 2]
 			j = BinarySearch(b, b.first, b.last, midpoint)
+
+			puts "MidPoint: #{midpoint}"
+			puts "J: #{j}"
+
 			t2 = Thread.new do
 				self.ClintonPMerge(a.take(l / 2), b.take(j), c.take(l/2 + j))
 			end
