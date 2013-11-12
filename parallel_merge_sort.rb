@@ -1,4 +1,5 @@
 module ParallelMergeSort
+	Thread.abort_on_exception = true
 
 	def self.Sort(duration, a)
 		# PRE Conditions
@@ -29,8 +30,11 @@ module ParallelMergeSort
 		  Thread.list.each {|t| t.kill}
 		end
 		
-		return self.MergeSort(a)
-
+		begin
+			return self.MergeSort(a)
+		rescue ThreadError
+			Thread.list.each {|t| t.kill}
+		end
 		watchdog.kill
 		
 		
