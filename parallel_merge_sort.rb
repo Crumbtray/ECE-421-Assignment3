@@ -39,7 +39,8 @@ module ParallelMergeSort
 		MergeSortInternal(c, a, 0, a.length - 1)
 		watchdog.kill
 		
-		puts a.to_s
+		puts "END A: #{a.to_s}"
+		puts "END C: #{c.to_s}"
 		
 		# POST Conditions
 		assert(@timeTaken < duration, "Time taken is over the stated duration.")

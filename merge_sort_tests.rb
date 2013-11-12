@@ -38,7 +38,7 @@ class MergeSortTests < Test::Unit::TestCase
 		assert_equal(b,a)
   	end
 	
-	def atest_two_reverse_numbers
+	def test_two_reverse_numbers
   		a = [2, 1]
   		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2]
@@ -52,7 +52,7 @@ class MergeSortTests < Test::Unit::TestCase
 		assert_equal(b,a)
   	end
 	
-	def test_basic_unsorted_numbers
+	def atest_basic_unsorted_numbers
   		a = [2, 3, 1]
   		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2, 3]
