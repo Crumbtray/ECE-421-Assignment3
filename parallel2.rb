@@ -26,7 +26,7 @@ module ParallelMergeSort
 			end
 			
 
-			return self.SeqMerge(left, right)
+			return self.PMerge(left, right)
 		end
 	end
 
