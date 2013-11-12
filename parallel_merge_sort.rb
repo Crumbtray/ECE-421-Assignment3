@@ -35,7 +35,7 @@ module ParallelMergeSort
 		# End POST Conditions
 	end
 
-	def MergeSortInternal(A, beginIndex, finalIndex)
+	def MergeSortInternal(a, beginIndex, finalIndex)
 		if(beginIndex < finalIndex)
 			q = (beginIndex + finalIndex) / 2
 			t1 = Thread.new do
@@ -53,8 +53,8 @@ module ParallelMergeSort
 	# PMerge as described in the extra notes, page 10.
 	# A is the first array, B is the second array,
 	# And the final result should be put into C.
-	def PMerge(A, B, C)
-
+	def PMerge(a, b, c)
+		puts "Hello"
 	end
 
 	def invariant
@@ -67,5 +67,6 @@ module ParallelMergeSort
 			return true
 		else
 			return false
+		end
 	end
 end
