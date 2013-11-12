@@ -30,16 +30,7 @@ module ParallelMergeSort
 
 		c = a.dup
 		
-		threads = []
-		watchdog = Thread.new do
-		  sleep duration
-		  puts "timeout!"
-		  threads.each do |t| t.terminate
-		  end
-		end
-		
-		MergeSortInternal(threads, c, a, 0, a.length - 1)
-		watchdog.terminate
+		MergeSortInternal(a, 1, a.length - 1, c)
 		
 		puts a.to_s
 		
@@ -50,21 +41,28 @@ module ParallelMergeSort
 		# End POST Conditions
 	end
 
-	def self.MergeSortInternal(threads, a, c, beginIndex, finalIndex)
-	  puts "MergeSortInternal"
-	  puts "%i %i" %[beginIndex, finalIndex]
+	def self.MergeSortInternal(a, beginIndex, finalIndex, c)
+	  	puts "MergeSortInternal"
+	 	puts "A: #{a}"
+	 	puts "BeginIndex: #{beginIndex}"
+	 	puts "FinalIndex: #{finalIndex}"
+
+		if(beginIndex == finalIndex)
+			return a
+		end
+
 		if(beginIndex < finalIndex)
 			q = (beginIndex + finalIndex) / 2
 			t1 = Thread.new do
-				self.MergeSortInternal(threads, a, c, beginIndex, q)
+				self.MergeSortInternal(a, beginIndex, q, c)
 			end
 			t2 = Thread.new do
-				self.MergeSortInternal(threads, a, c, q + 1, finalIndex)
+				self.MergeSortInternal(a, q + 1, finalIndex, c)
 			end
-			threads.push(t1, t2)
 			t1.join
 			t2.join
-			self.PMerge(threads, a, c, beginIndex, q, q + 1, finalIndex, beginIndex)
+			self.ClintonPMerge(t1.value, t2.value, c)
+			#self.PMerge(threads, a, c, beginIndex, q, q + 1, finalIndex, beginIndex)
 		end
 	end
 
@@ -113,6 +111,48 @@ module ParallelMergeSort
 			t3.join
 		end
 	end
+
+	def self.ClintonPMerge(a, b, c)
+		puts "ClintonPMERGE:"
+		puts "A: #{a}, #{a.class}"
+		puts "B: #{b}"
+		puts "C: #{c}"
+
+		l = a.length - 1
+		m = b.length - 1
+		n = c.length - 1
+
+		if(m > l)
+			t1 = Thread.new do
+				self.ClintonPMerge(b, a, c)
+			end
+			t1.join
+		elsif (n == 1)
+			c[1] = a[1]
+		elsif (l == 1 && m == 1)
+			if(a[1] <= b[1])
+				c[1] = a[1]
+				c[2] = b[1]
+			else
+				c[1] = b[1]
+				c[2] = a[1]
+			end
+		else
+			midpoint = a[l / 2]
+			j = BinarySearch(b, b.first, b.last, midpoint)
+			t2 = Thread.new do
+				self.ClintonPMerge(a.take(l / 2), b.take(j), c.take(l/2 + j))
+			end
+
+			t3 = Thread.new do
+				self.ClintonPMerge(a.drop(l / 2), b.drop(j), c.drop(l/2 + j))
+			end
+			t2.join
+			t3.join
+		end
+
+	end
+
 
 	def self.BinarySearch(b, bMin, bMax, value)
 		low = bMin
