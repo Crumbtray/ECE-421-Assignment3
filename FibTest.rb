@@ -5,10 +5,10 @@ Thread.abort_on_exception = false
 			return n
 		else
 			x = Thread.new do
-				self.Fibonacci(n - 1)
+				self.Fib(n - 1)
 			end
 			y = Thread.new do
-				self.Fibonacci(n - 2)
+				self.Fib(n - 2)
 			end
 			x.join
 			y.join
