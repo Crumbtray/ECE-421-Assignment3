@@ -31,19 +31,16 @@ module ParallelMergeSort
 		c = a.dup
 		
 		threads = []
-		threads.push(Thread.current)
-		
 		watchdog = Thread.new do
 		  sleep duration
 		  puts "timeout!"
-		  threads.each do |t| t.terminate!
+		  threads.each do |t| t.terminate
 		  end
 		end
 		
 
 		
 		MergeSortInternal(threads, c, a, 0, a.length - 1)
-
 		puts a.to_s
 		
 		# POST Conditions
