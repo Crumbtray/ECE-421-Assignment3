@@ -37,9 +37,9 @@ class MergeSortTests < Test::Unit::TestCase
   	end
 	
 	def test_basic_unsorted_numbers
-  		a = [3, 2, 1]
+  		a = [2, 3, 1]
   		a = ParallelMergeSort.MergeSort(10, a)
-		b = [2, 3, 1]
+		b = [1, 2, 3]
 		assert_equal(b,a)
   	end
 	
