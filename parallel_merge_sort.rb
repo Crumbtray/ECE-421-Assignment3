@@ -28,6 +28,10 @@ module ParallelMergeSort
 
 		@timeTaken = 0
 
+		c = Array.new(a.length)
+		
+		MergeSortInternal(a, c, 0, a.length - 1, 0)
+		
 		# POST Conditions
 		assert(@timeTaken < duration, "Time taken is over the stated duration.")
 		assert(acceptanceTest(a), "Array a is not sorted properly.")
@@ -35,18 +39,18 @@ module ParallelMergeSort
 		# End POST Conditions
 	end
 
-	def MergeSortInternal(a, beginIndex, finalIndex)
+	def self.MergeSortInternal(a, c, beginIndex, finalIndex, cMin)
 		if(beginIndex < finalIndex)
 			q = (beginIndex + finalIndex) / 2
 			t1 = Thread.new do
-				MergeSortInternal(A, beginIndex, q)
+				MergeSortInternal(a, c, beginIndex, q, cMin)
 			end
 			t2 = Thread.new do
-				MergeSortInternal(A, q + 1, finalIndex)
+				MergeSortInternal(a, c, q + 1, finalIndex, cMin)
 			end
 			t1.join
 			t2.join
-			# PMerge(A, B, C)
+			PMerge(a, c, beginIndex, q, q + 1, finalIndex, cMin)
 		end
 	end
 
@@ -55,7 +59,7 @@ module ParallelMergeSort
 	# aMin and aMax specifiy where the subarray A is in a
 	# bMin and bMax specifiy where the subarray B is in a
 	# cMin specifies where to insert a newly sorted value into c
-    def PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
+    def self.PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
 	  aLength = aMax - aMin + 1
 	  bLength = bMax - bMin + 1
 		if bLength > aLength
@@ -71,8 +75,9 @@ module ParallelMergeSort
 			  sorted[cMin + 1] = unsorted[aMin]
 			end
 		else 
-			bMid = BinarySearch(unsorted, bMin, bMax, unsorted[alength/2 + aMin])
 			aMid = (aMax + aMin) / 2
+			bMid = BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
+			
 			
 			t2 = Thread.new do 
 			  PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
@@ -89,7 +94,7 @@ module ParallelMergeSort
 		end
 	end
 
-	def BinarySearch(b, bMin, bMax, value)
+	def self.BinarySearch(b, bMin, bMax, value)
 		low = bMin
 		high = bMax
 		while low < high
