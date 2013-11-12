@@ -100,4 +100,12 @@ class SortTests < Test::Unit::TestCase
 		b = [1, 1, 2, 4, 4, 5, 7, 8, 9, 9, 10]
 		assert_equal(b, newA)
   	end
+  	
+  def test_many_random_numbers
+    srand(5)
+    a = (0..300).map{rand(-1000..1000)}
+    newA = ParallelMergeSort.Sort(2, a)
+    b = a.sort
+    assert_equal(b,newA)
+    end
 end
