@@ -51,10 +51,56 @@ module ParallelMergeSort
 	end
 
 	# PMerge as described in the extra notes, page 10.
-	# A is the first array, B is the second array,
-	# And the final result should be put into C.
-	def PMerge(a, b, c)
-		puts "Hello"
+    # a is the array to be sorted, c is to contain the sorted results, 
+	# aMin and aMax specifiy where the subarray A is in a
+	# bMin and bMax specifiy where the subarray B is in a
+	# cMin specifies where to insert a newly sorted value into c
+    def PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
+	  aLength = aMax - aMin + 1
+	  bLength = bMax - bMin + 1
+		if bLength > aLength
+			t1 = Thread.new do PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
+			end
+			t1.join
+		elsif (aLength== 1) and (bLength == 1)
+			if unsorted[aMin] <= unsorted[bMin]
+				sorted[cMin] = unsorted[aMin]
+				sorted[cMin + 1] = unsorted[bMin]
+			else
+			  sorted[cMin] = unsorted[bMin]
+			  sorted[cMin + 1] = unsorted[aMin]
+			end
+		else 
+			bMid = BinarySearch(unsorted, bMin, bMax, unsorted[alength/2 + aMin])
+			aMid = (aMax + aMin) / 2
+			
+			t2 = Thread.new do 
+			  PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
+			end
+			
+			cMin = cMin + aMid - aMin + bMid - bMin
+			sorted[cMin] = unsorted[aMid] 
+			
+			t3 = Thread.new do
+			  PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMin)
+			end
+			t2.join
+			t3.join
+		end
+	end
+
+	def BinarySearch(b, bMin, bMax, value)
+		low = bMin
+		high = bMax
+		while low < high
+			mid = (low + high) / 2
+			if b[mid] < value
+				low = mid + 1
+			else
+				high = mid
+			end
+		end
+		return low
 	end
 
 	def invariant
