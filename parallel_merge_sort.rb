@@ -40,6 +40,8 @@ module ParallelMergeSort
 	end
 
 	def self.MergeSortInternal(a, c, beginIndex, finalIndex, cMin)
+	  puts "MergeSortInternal"
+	  puts "%i %i %i" %[beginIndex, finalIndex, cMin]
 		if(beginIndex < finalIndex)
 			q = (beginIndex + finalIndex) / 2
 			t1 = Thread.new do
@@ -60,13 +62,19 @@ module ParallelMergeSort
 	# bMin and bMax specifiy where the subarray B is in a
 	# cMin specifies where to insert a newly sorted value into c
     def self.PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
-	  aLength = aMax - aMin + 1
-	  bLength = bMax - bMin + 1
+      puts "PMerge"
+    puts unsorted.to_s
+    puts sorted.to_s
+    puts "%i %i %i %i %i" %[aMin, aMax, bMin, bMax, cMin]
+    
+		aLength = aMax - aMin + 1
+		bLength = bMax - bMin + 1
 		if bLength > aLength
-			t1 = Thread.new do self.PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
+			t1 = Thread.new do 
+				self.PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
 			end
 			t1.join
-		elsif (aLength== 1) and (bLength == 1)
+		elsif (aLength == 1) and (bLength == 1)
 			if unsorted[aMin] <= unsorted[bMin]
 				sorted[cMin] = unsorted[aMin]
 				sorted[cMin + 1] = unsorted[bMin]
@@ -78,13 +86,11 @@ module ParallelMergeSort
 			aMid = (aMax + aMin) / 2
 			bMid = self.BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
 			
-			
 			t2 = Thread.new do 
-			  self.PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
+			  self.PMerge(unsorted, sorted, aMin, aMid, bMin, bMid, cMin)
 			end
 			
-			cMin = cMin + aMid - aMin + bMid - bMin
-			sorted[cMin] = unsorted[aMid] 
+			cMin = cMin + aMid - aMin + bMid - bMin + 1
 			
 			t3 = Thread.new do
 			  self.PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMin)
