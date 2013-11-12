@@ -36,6 +36,9 @@ module ParallelMergeSort
 		  Thread.list.each {|t| t.kill}
 		end
 		
+		puts "BEFORE A: #{a.to_s}"
+		puts "BEFORE C: #{c.to_s}"
+
 		MergeSortInternal(c, a, 0, a.length - 1)
 		watchdog.kill
 		
