@@ -82,6 +82,10 @@ module ParallelMergeSort
     
 		aLength = aMax - aMin + 1
 		bLength = bMax - bMin + 1
+
+		puts "A Length: #{aLength}"
+		puts "B Length: #{bLength}"
+
 		if bLength > aLength
 			puts "Reordering (B is longer than A)"
 			t1 = Thread.new do 
@@ -91,19 +95,25 @@ module ParallelMergeSort
 		elsif bLength == 0
 			puts "B is zero, so use A"
 			puts "aMin: #{aMin} (Should be zero!!!!)"
-			puts "Index #{cMin} should be equal to #{unsorted[aMin]}"
+			puts "Index #{cMin} is set to #{unsorted[aMin]}"
 		  	sorted[cMin] = unsorted[aMin]
-		elsif (aLength == 1) and (bLength == 1)
+		elsif aLength == 1 and bLength == 1
+			puts "#{unsorted[aMin]} vs #{unsorted[bMin]}"
   			if unsorted[aMin] <= unsorted[bMin]
+  				puts "#{unsorted[aMin]} is smaller."
   				sorted[cMin] = unsorted[aMin]
   				sorted[cMin + 1] = unsorted[bMin]
   			else
-  			  sorted[cMin] = unsorted[bMin]
-  			  sorted[cMin + 1] = unsorted[aMin]
+  				puts "#{unsorted[bMin]} is smaller."
+  			  	sorted[cMin] = unsorted[bMin]
+  			  	sorted[cMin + 1] = unsorted[aMin]
   			end
 		else 
 			aMid = (aMax + aMin) / 2
 			bMid = self.BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
+
+			puts "A's Midpoint: #{aMid}"
+			puts "B's Midpoint: #{bMid}"
 			cMid = cMin + aMid - aMin + bMid - bMin
       
 			t2 = Thread.new do 
@@ -118,6 +128,10 @@ module ParallelMergeSort
 	end
 
 	def self.BinarySearch(b, bMin, bMax, value)
+		puts "B: #{b}"
+		puts "From: #{bMin} to #{bMax}"
+		puts "Looking for #{value}"
+
 		low = bMin
 		high = bMax
 		while low < high
