@@ -8,11 +8,27 @@ class MergeSortTests < Test::Unit::TestCase
 	# - Really Small Duration (All threads should be dead)
 	# - Different sizes of input ()
 
-	def test_invalid_arguments
+	def test_argument_not_array
 		assert_raise ArgumentError do
 			a = "BOOBOO"
 			ParallelMergeSort.MergeSort(10, a)
 		end
+  	end
+	
+	def test_arguments_not_comparable
+		assert_raise ArgumentError do
+			a = [1,'a']
+			ParallelMergeSort.MergeSort(10, a)
+		end
+  	end
+	
+	def test_duration_exceeded
+  		a = [2, 3, 1]
+		duration = 0.001
+		start = Time.now
+  		ParallelMergeSort.MergeSort(duration, a)
+		assert_in_delta(start + duration, Time.now, 1);
+		
   	end
 	
 	def test_two_sorted_numbers
