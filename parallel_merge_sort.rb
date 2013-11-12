@@ -21,7 +21,7 @@ module ParallelMergeSort
 
 		begin
 			a.each {|element|
-				raise ArgumentError, "ParallelMergeSort::ArgumentError -> Elements do not implement Comparable." unless element.included_modules.include? Comparable
+				raise ArgumentError, "ParallelMergeSort::ArgumentError -> Elements do not implement Comparable." unless element.class.included_modules.include? Comparable
 			}
 		end
 		# End PRE Conditions
@@ -61,7 +61,7 @@ module ParallelMergeSort
 		assert(@timeTaken < duration)
 	end
 
-	def acceptanceTest(a)
+	def self.acceptanceTest(a)
 		b = a.sort
 		if(a == b)
 			return true
