@@ -92,7 +92,7 @@ module ParallelMergeSort
 			puts "B is zero, so use A"
 			puts "aMin: #{aMin} (Should be zero!!!!)"
 			puts "Index #{cMin} should be equal to #{unsorted[aMin]}"
-		  	sorted[cMin + 1] = unsorted[aMin]
+		  	sorted[cMin] = unsorted[aMin]
 		elsif (aLength == 1) and (bLength == 1)
   			if unsorted[aMin] <= unsorted[bMin]
   				sorted[cMin] = unsorted[aMin]
@@ -105,12 +105,12 @@ module ParallelMergeSort
 			aMid = (aMax + aMin) / 2
 			bMid = self.BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
 			cMid = cMin + aMid - aMin + bMid - bMin
-      
+      sorted[cMid] = unsorted[aMid]
 			t2 = Thread.new do 
 			  self.PMerge(unsorted, sorted, aMin, aMid, bMin, bMid, cMin)
 			end
 			t3 = Thread.new do
-			  self.PMerge(unsorted, sorted, aMid + 1, aMax, bMid + 1, bMax, cMid + 1)
+			  self.PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMid + 1)
 			end
 			t2.join
 			t3.join
