@@ -1,11 +1,6 @@
-require 'test/unit/assertions.rb'
-include Test::Unit::Assertions
-
-# Module that implements multi-threaded merge sort
 module ParallelMergeSort
-	# Sorts Array A in the time limit duration
-	# using Parallel MergeSort.
-	def self.MergeSort(duration, a)
+
+	def self.Sort(duration, a)
 		# PRE Conditions
 		begin
 			raise ArgumentError, "ParallelMergeSort::ArgumentError -> duration is not a positive number" unless duration > 0
@@ -27,8 +22,6 @@ module ParallelMergeSort
 		# End PRE Conditions
 
 		@timeTaken = 0
-
-		c = a.dup
 		
 		watchdog = Thread.new do
 		  sleep duration
@@ -36,14 +29,10 @@ module ParallelMergeSort
 		  Thread.list.each {|t| t.kill}
 		end
 		
-		puts "BEFORE A: #{a.to_s}"
-		puts "BEFORE C: #{c.to_s}"
+		return self.MergeSort(a)
 
-		MergeSortInternal(c, a, 0, a.length - 1)
 		watchdog.kill
 		
-		puts "END A: #{a.to_s}"
-		puts "END C: #{c.to_s}"
 		
 		# POST Conditions
 		assert(@timeTaken < duration, "Time taken is over the stated duration.")
@@ -52,95 +41,84 @@ module ParallelMergeSort
 		# End POST Conditions
 	end
 
-	def self.MergeSortInternal(a, c, beginIndex, finalIndex)
-	  puts "MergeSortInternal"
-	  puts "%i %i" %[beginIndex, finalIndex]
-		if(beginIndex < finalIndex)
-			q = (beginIndex + finalIndex) / 2
+	def self.MergeSort(a)
+		if a.length <= 1
+			return a
+		else
+			midpoint = a.length / 2
 			t1 = Thread.new do
-				self.MergeSortInternal(a, c, beginIndex, q)
+				self.MergeSort(a.take(midpoint))
 			end
 			t2 = Thread.new do
-				self.MergeSortInternal(a, c, q + 1, finalIndex)
+				self.MergeSort(a.drop(midpoint))
 			end
+
 			t1.join
 			t2.join
-			self.PMerge(a, c, beginIndex, q, q + 1, finalIndex, beginIndex)
+			
+			left = t1.value
+			right = t2.value
+
+			returnval = self.PMerge(left, right)
+			return returnval
 		end
 	end
 
-	# PMerge as described in the extra notes, page 10.
-    # a is the array to be sorted, c is to contain the sorted results, 
-	# aMin and aMax specifiy where the subarray A is in a
-	# bMin and bMax specifiy where the subarray B is in a
-	# cMin specifies where to insert a newly sorted value into c
-    def self.PMerge(unsorted, sorted, aMin, aMax, bMin, bMax, cMin)
-      puts "PMerge"
-    	puts unsorted.to_s
-    	puts sorted.to_s
-    	puts "%i %i %i %i %i" %[aMin, aMax, bMin, bMax, cMin]
-    
-		aLength = aMax - aMin + 1
-		bLength = bMax - bMin + 1
-		if bLength > aLength
-			puts "Reordering (B is longer than A)"
-			t1 = Thread.new do 
-				self.PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
-			end
-			t1.join
-		elsif bLength == 0
-			puts "B is zero, so use A"
-			puts "aMin: #{aMin} (Should be zero!!!!)"
-			puts "Index #{cMin} should be equal to #{unsorted[aMin]}"
-		  	sorted[cMin] = unsorted[aMin]
-		elsif (aLength == 1) and (bLength == 1)
-  			if unsorted[aMin] <= unsorted[bMin]
-  				sorted[cMin] = unsorted[aMin]
-  				sorted[cMin + 1] = unsorted[bMin]
-  			else
-  			  sorted[cMin] = unsorted[bMin]
-  			  sorted[cMin + 1] = unsorted[aMin]
-  			end
-		else 
-			aMid = (aMax + aMin) / 2
-			bMid = self.BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
-			cMid = cMin + aMid - aMin + bMid - bMin
-      sorted[cMid] = unsorted[aMid]
-			t2 = Thread.new do 
-			  self.PMerge(unsorted, sorted, aMin, aMid, bMin, bMid, cMin)
-			end
-			t3 = Thread.new do
-			  self.PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMid + 1)
-			end
-			t2.join
-			t3.join
-		end
-	end
-
-	def self.BinarySearch(b, bMin, bMax, value)
-		low = bMin
-		high = bMax
-		while low < high
-			mid = (low + high) / 2
-			if b[mid] < value
-				low = mid + 1
+	def self.PMerge(a, b)
+		puts "PMerge on #{a}, #{b}"
+		result = Array.new
+		# The idea here is to concatenate a with b, but finding the right place to merge by using binary search.
+		if(b.length > a.length)
+			self.PMerge(b, a)
+		elsif(b.empty?)
+			return a
+		elsif(a.empty?)
+			return b
+		elsif(a.length == 1 and b.length == 1)
+			if (a.first <= b.first)
+				result.push(a.first).push(b.first)
+				return result
 			else
-				high = mid
+				result.push(b.first).push(a.first)
+				return result
+			end
+		else
+			# Split A and B by finding J through binary search.
+			midpoint = a.length / 2
+			j = self.MergeBinarySearch(b, a[midpoint])
+
+			t1 = Thread.new do
+				self.PMerge(a.take(midpoint), b.take(j + 1))
+			end
+
+			t2 = Thread.new do
+				self.PMerge(a.drop(midpoint), b.drop(j + 1))
+			end
+
+			t1.join
+			t2.join			
+			
+			return t1.value + t2.value
+		end
+	end
+
+	# Special kind of binary search.
+	# We're looking for the index J such that
+	# B[J] < value < B[J+1]
+	def self.MergeBinarySearch(b, value)
+		imin = 0
+		imax = b.length - 1
+
+		while (imax >= imin)
+			imid = (imax + imin) / 2
+			if(b[imid] < value)
+				imin = imid + 1
+			elsif (b[imid] > value)
+				imax = imid - 1
 			end
 		end
-		return low
+
+		return imax
 	end
 
-	def invariant
-		assert(@timeTaken < duration)
-	end
-
-	def self.acceptanceTest(a)
-		b = a.sort
-		if(a == b)
-			return true
-		else
-			return false
-		end
-	end
 end
