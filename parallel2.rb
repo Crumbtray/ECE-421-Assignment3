@@ -70,7 +70,6 @@ module ParallelMergeSort
 		imax = b.length - 1
 
 		while (imax >= imin)
-
 			imid = (imax + imin) / 2
 			if(b[imid] < value)
 				imin = imid + 1
@@ -82,7 +81,7 @@ module ParallelMergeSort
 		end
 
 		if(b[imax] < value)
-			return imax
+			return imid
 		end
 	end
 
