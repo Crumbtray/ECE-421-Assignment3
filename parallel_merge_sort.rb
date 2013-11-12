@@ -38,9 +38,9 @@ module ParallelMergeSort
 		  end
 		end
 		
-
-		
 		MergeSortInternal(threads, c, a, 0, a.length - 1)
+		watchdog.terminate
+		
 		puts a.to_s
 		
 		# POST Conditions
@@ -106,14 +106,13 @@ module ParallelMergeSort
 			t2 = Thread.new do 
 			  self.PMerge(threads, unsorted, sorted, aMin, aMid, bMin, bMid, cMin)
 			end
-			threads.push(t2)
-			
+
 			cMid = cMin + aMid - aMin + bMid - bMin + 1
 			
 			t3 = Thread.new do
 			  self.PMerge(threads, unsorted, sorted, aMid + 1, aMax, bMid + 1, bMax, cMid)
 			end
-			threads.push(t3)
+			threads.push(t2, t3)
 			t2.join
 			t3.join
 		end
