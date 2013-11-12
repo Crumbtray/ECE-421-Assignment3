@@ -19,14 +19,12 @@ module ParallelMergeSort
 			right = t2.value
 
 			returnval = self.PMerge(left, right)
-			puts "RETURN VAL: #{returnval}"
 			return returnval
 		end
 	end
 
 	def self.PMerge(a, b)
 		result = Array.new
-		puts "PMerge with #{a.to_s} and #{b.to_s}"
 		# The idea here is to concatenate a with b, but finding the right place to merge by using binary search.
 		if(b.length > a.length)
 			self.PMerge(b, a)
@@ -46,19 +44,19 @@ module ParallelMergeSort
 			# Split A and B by finding J through binary search.
 			midpoint = a.length / 2
 			j = self.MergeBinarySearch(b, a[midpoint])
-			puts "#{b[j]} should be < #{a[midpoint]}"
 
-			puts "Breaking array #{a.to_s} into #{a.take(midpoint)}, #{a.drop(midpoint)}"
-			puts "Breaking array #{b.to_s} into #{b.take(j + 1)}, #{b.drop(j+1)}"
+			t1 = Thread.new do
+				self.PMerge(a.take(midpoint), b.take(j + 1))
+			end
 
-			newa = self.PMerge(a.take(midpoint), b.take(j + 1))
-			newb = self.PMerge(a.drop(midpoint), b.drop(j + 1))
+			t2 = Thread.new do
+				self.PMerge(a.drop(midpoint), b.drop(j + 1))
+			end
 
-			puts "NEWA: #{newa}"
-			puts "NEWB: #{newb}"
-			# Crude filler right now.
-
-			return newa + newb
+			t1.join
+			t2.join			
+			
+			return t1.value + t2.value
 		end
 	end
 
