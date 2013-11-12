@@ -43,14 +43,14 @@ module ParallelMergeSort
 		if(beginIndex < finalIndex)
 			q = (beginIndex + finalIndex) / 2
 			t1 = Thread.new do
-				MergeSortInternal(a, c, beginIndex, q, cMin)
+				self.MergeSortInternal(a, c, beginIndex, q, cMin)
 			end
 			t2 = Thread.new do
-				MergeSortInternal(a, c, q + 1, finalIndex, cMin)
+				self.MergeSortInternal(a, c, q + 1, finalIndex, cMin)
 			end
 			t1.join
 			t2.join
-			PMerge(a, c, beginIndex, q, q + 1, finalIndex, cMin)
+			self.PMerge(a, c, beginIndex, q, q + 1, finalIndex, cMin)
 		end
 	end
 
@@ -63,7 +63,7 @@ module ParallelMergeSort
 	  aLength = aMax - aMin + 1
 	  bLength = bMax - bMin + 1
 		if bLength > aLength
-			t1 = Thread.new do PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
+			t1 = Thread.new do self.PMerge(unsorted, sorted, bMin, bMax, aMin, aMax, cMin)
 			end
 			t1.join
 		elsif (aLength== 1) and (bLength == 1)
@@ -76,18 +76,18 @@ module ParallelMergeSort
 			end
 		else 
 			aMid = (aMax + aMin) / 2
-			bMid = BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
+			bMid = self.BinarySearch(unsorted, bMin, bMax, unsorted[aMid])
 			
 			
 			t2 = Thread.new do 
-			  PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
+			  self.PMerge(unsorted, sorted, aMin, aMid - 1, bMin, bMid, cMin)
 			end
 			
 			cMin = cMin + aMid - aMin + bMid - bMin
 			sorted[cMin] = unsorted[aMid] 
 			
 			t3 = Thread.new do
-			  PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMin)
+			  self.PMerge(unsorted, sorted, aMid + 1, aMax, bMid, bMax, cMin)
 			end
 			t2.join
 			t3.join
