@@ -17,42 +17,42 @@ class MergeSortTests < Test::Unit::TestCase
 	
 	def test_two_sorted_numbers
   		a = [1, 2]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2]
 		assert_equal(b,a)
   	end
 	
 	def test_two_reverse_numbers
   		a = [2, 1]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2]
 		assert_equal(b,a)
   	end
 
   	def test_basic_sorted_numbers
   		a = [1, 2, 3]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2, 3]
 		assert_equal(b,a)
   	end
 	
 	def test_basic_unsorted_numbers
   		a = [2, 3, 1]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [1, 2, 3]
 		assert_equal(b,a)
   	end
 	
 	def atest_many_sorted_numbers
   		a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 		assert_equal(b,a)
   	end
 	
 	def atest_many_unsorted_numbers
   		a = [5, 7, 9, 0, 2, 4, 6, 10, 8, 3, 1]
-  		a = ParallelMergeSort.MergeSort(10, a)
+  		ParallelMergeSort.MergeSort(10, a)
 		b = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 		assert_equal(b,a)
   	end
